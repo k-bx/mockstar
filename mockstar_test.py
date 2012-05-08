@@ -3,6 +3,7 @@
 import unittest
 from unittest import TestCase
 from mock import Mock
+from mock import patch
 
 from mockstar import p
 from mockstar import DotDict
@@ -23,6 +24,10 @@ def side_effect_three():
 
 def side_effect_four():
     return 4
+
+
+def side_effect_five(n):
+    return n
 
 
 class TestDotDict(TestCase):
@@ -51,6 +56,12 @@ class TestPatch(TestCase):
         result = side_effect_three()
 
         self.assertEquals(result, 2)
+
+    @p(__name__ + '.side_effect_five', autospec=True)
+    @patch('mockstar.patch')
+    def test_should_pass_mock_parameters(self, mockstar_patch_mock, se):
+        se.side_effect_five(10)
+        self.assertRaises(TypeError, lambda: se.side_effect_five())
 
 
 if __name__ == '__main__':
