@@ -34,26 +34,36 @@ def p(name, *args, **kw):
     into special dict-like ``se`` parameter.
     """
     def rv_decorator(fn):
-        if not hasattr(fn, 'side_effects'):
-            fn.side_effects = DotDict()
-
-        # we will store mock obj here
-        rv_decorator.patch_mock = None
-
-        def collector(mocked):
-            rv_decorator.patch_mock = mocked
-
-        patch(name, *args, **kw)(collector)()
-
-        names = get_names(name)
-        for store_name in names:
-            fn.side_effects[store_name] = rv_decorator.patch_mock
+        patcher = patch(name, *args, **kw)
+        # add names to patcher
+        patcher.names = get_names(name)
+        new_patchers = []
+        if hasattr(fn, 'patchers'):
+            new_patchers += fn.patchers
+            del fn.patchers
+        new_patchers.append(patcher)
 
         @wraps(fn)
         def rv_fun(*args, **kw):
             new_kw = kw.copy()
-            new_kw.update({'se': fn.side_effects})
-            return fn(*args, **new_kw)
+            if hasattr(rv_fun, 'patchers'):
+                d = {}
+                for patcher in rv_fun.patchers:
+                    m = patcher.start()
+                    for name in patcher.names:
+                        d[name] = m
+                se = DotDict(**d)
+
+                new_kw.update({'se': se})
+            try:
+                rv = fn(*args, **new_kw)
+            finally:
+                if hasattr(rv_fun, 'patchers'):
+                    for patcher in rv_fun.patchers:
+                        patcher.stop()
+            return rv
+
+        rv_fun.patchers = new_patchers
         return rv_fun
     return rv_decorator
 
