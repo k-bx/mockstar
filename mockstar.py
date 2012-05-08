@@ -68,109 +68,18 @@ def p(name, *args, **kw):
     return rv_decorator
 
 
+def prefixed_p(prefix, patcher=p, **defaults):
+    """
+    Create "prefixed" version of p with default parameters set.
 
-
-
-
-
-
-
-
-# def complex_function(silly_obj):
-#     rv1 = side_effect_1(1)
-#     side_effect_2(rv1)
-#     transmit(silly_obj)
-#     additional()
-#     obj = Object.get(10)
-#     return obj.double_pk()
-
-
-# def side_effect_1(num):
-#     return num
-
-
-# def side_effect_2(num):
-#     pass
-
-
-# def transmit():
-#     pass
-
-
-# def additional():
-#     pass
-
-
-# class Object(object):
-#     def __init__(self, pk):
-#         self.pk = pk
-#         super(Object, self).__init__()
-
-#     @staticmethod
-#     def get(self, pk):
-#         return Object(pk)
-
-#     def double_pk(self):
-#         return self.pk * 2
-
-
-# class BaseTestCase(TestCase):
-#     pass
-
-
-# def patch(*args, **kw):
-#     pass
-
-
-# def p(*args, **kw):
-#     pass
-
-
-# def build_silly_obj():
-#     return object()
-
-
-# class TestComplexFunction(BaseTestCase):
-#     def side_effects(self):
-#         return [
-#             p('side_effect_1', autospec=True),
-#             p('side_effect_2', autospec=False),
-#             p('Object.get', autospec=False),
-#             p('transmit', autospec=True)]
-
-#     @patch('additional')
-#     def test_should_call_side_effect_2(self, additional_mock, se=None):
-#         """``se`` is for side-effects. ``m`` is for by-hand mocks
-#         """
-#         silly_obj = build_silly_obj()
-
-#         # do
-#         result = complex_function(silly_obj)
-
-
-# class TestCallback(BaseTestCase):
-#     def setUp(self):
-#         super(TestCallback, self).setUp()
-
-#     def tearDown(self):
-#         super(TestCallback, self).tearDown()
-
-#     side_effects = [
-#         p('build_engine', rv_name='engine'),
-#         p('_callback_success_profile', side_effect='success'),
-#         p('_callback_failure_profile', side_effect='failure')]
-
-#     def test_should_go_success(self, se=None):
-#         request = build_request()
-#         backend = 'twitter'
-#         # engine = se.build_engine.return_value
-#         se.engine.profile = M()  # not None
-
-#         # do
-#         result = views.callback(request, backend)
-
-#         se.success.assert_called_with(
-#             request, engine, 'web')
-#         self.assertEquals(
-#             result,
-#             se.success.return_value)
+    Arguments:
+    - `prefix`: prefix, which will be joined with a dot and added to your
+                patch func.
+    - `**defaults`: default kw-args
+    """
+    @wraps(patcher)
+    def rv(name, *args, **kw):
+        new_kw = kw.copy()
+        new_kw.update(defaults)
+        return patcher(prefix + '.' + name, *args, **new_kw)
+    return rv

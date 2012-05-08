@@ -7,6 +7,7 @@ from mock import patch
 
 from mockstar import p
 from mockstar import DotDict
+from mockstar import prefixed_p
 
 
 def side_effect_one():
@@ -61,6 +62,15 @@ class TestPatch(TestCase):
     @patch('mockstar.patch')
     def test_should_pass_mock_parameters(self, mockstar_patch_mock, se):
         se.side_effect_five(10)
+        self.assertRaises(TypeError, lambda: se.side_effect_five())
+
+
+ppatch = prefixed_p(__name__)
+
+
+class TestPrefixedP(TestCase):
+    @ppatch('side_effect_five', autospec=True)
+    def test_should_prefix_patch_here(self, se):
         self.assertRaises(TypeError, lambda: se.side_effect_five())
 
 
