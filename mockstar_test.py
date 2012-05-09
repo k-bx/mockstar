@@ -2,12 +2,13 @@
 
 import unittest
 from unittest import TestCase
-from mock import Mock
+from mock import MagicMock
 from mock import patch
 
 from mockstar import p
 from mockstar import DotDict
 from mockstar import prefixed_p
+from mockstar import M
 
 
 def side_effect_one():
@@ -46,8 +47,8 @@ class TestPatch(TestCase):
     @p(__name__ + '.side_effect_one')
     @p(__name__ + '.side_effect_two')
     def test_should_mock_to_kw(self, se):
-        self.assertIsInstance(se.side_effect_one, Mock)
-        self.assertIsInstance(se.side_effect_two, Mock)
+        self.assertIsInstance(se.side_effect_one, MagicMock)
+        self.assertIsInstance(se.side_effect_two, MagicMock)
 
     @p(__name__ + '.side_effect_four')
     def test_should_mock_inner_call(self, se):
@@ -65,7 +66,20 @@ class TestPatch(TestCase):
         self.assertRaises(TypeError, lambda: se.side_effect_five())
 
 
+class TestM(TestCase):
+    def test_should_create_object(self):
+        m = M()
+        m.asd = 'dsa'
+        self.assertEquals(m.asd, 'dsa')
+
+    def test_should_make_couple_rv(self):
+        m = M()
+        m.foo.rv.bar.rv.baz.rv = 28
+        self.assertEquals(m.foo().bar().baz(), 28)
+
+
 ppatch = prefixed_p(__name__)
+# ppatch_autospec_M = prefixed_p(__name__, autospec=True, to_m=True)
 
 
 class TestPrefixedP(TestCase):
@@ -73,17 +87,25 @@ class TestPrefixedP(TestCase):
     def test_should_prefix_patch_here(self, se):
         self.assertRaises(TypeError, lambda: se.side_effect_five())
 
+    # @ppatch_autospec_M('side_effect_five')
+    # def test_should_return_m_and_raise_typeerror(self, se):
+    #     self.assertRaises(TypeError, lambda: se.side_effect_five())
+    #     se.side_effect_five.rv = 20
+    #     res = se.side_effect_five(10)
+    #     self.assertEquals(res, 20)
+    #     # self.assertIsInstance(m, M)
+
 
 @ppatch('side_effect_one')
 @ppatch('side_effect_two')
 class TestPatchClass(TestCase):
     def test_should_get_se(self, se):
-        self.assertIsInstance(se.side_effect_one, Mock)
-        self.assertIsInstance(se.side_effect_two, Mock)
+        self.assertIsInstance(se.side_effect_one, MagicMock)
+        self.assertIsInstance(se.side_effect_two, MagicMock)
 
     def test_should_also_get_se(self, se):
-        self.assertIsInstance(se.side_effect_one, Mock)
-        self.assertIsInstance(se.side_effect_two, Mock)
+        self.assertIsInstance(se.side_effect_one, MagicMock)
+        self.assertIsInstance(se.side_effect_two, MagicMock)
 
 
 if __name__ == '__main__':

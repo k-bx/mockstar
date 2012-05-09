@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from mock import patch
+import types
 from functools import wraps
+
+from mock import patch
+from mock import MagicMock
 
 
 class DotDict(dict):
@@ -83,3 +86,31 @@ def prefixed_p(prefix, patcher=p, **defaults):
         new_kw.update(defaults)
         return patcher(prefix + '.' + name, *args, **new_kw)
     return rv
+
+
+class RVDescriptor(object):
+    def __get__(self, instance, owner):
+        if instance is None:
+            return owner.return_value
+        return instance.return_value
+
+    def __set__(self, instance, value):
+        instance.return_value = value
+
+    def __delete__(self, instance):
+        del instance.return_value
+
+
+class M(MagicMock):
+    """
+    :class:`~MagicMock` with shortcuts. I just couldn't stand the
+    ``.return_value.foo.return_value.bar.return_value`` thing.
+    """
+    def __init__(self, *args, **kw):
+        super(M, self).__init__(*args, **kw)
+
+    def _get_child_mock(self, **kw):
+        return M(**kw)
+
+    #: shortcut for ``.return_value``
+    rv = RVDescriptor()
