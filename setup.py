@@ -13,4 +13,5 @@ setup(name='mockstar',
       author='Konstantine Rybnikov',
       author_email='k-bx@k-bx.com',
       url='https://bitbucket.org/k_bx/mockstar',
-      py_modules=['mockstar'])
+      py_modules=['mockstar'],
+      requires=['mock (>=0.8.0)'])
