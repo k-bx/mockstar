@@ -74,5 +74,17 @@ class TestPrefixedP(TestCase):
         self.assertRaises(TypeError, lambda: se.side_effect_five())
 
 
+@ppatch('side_effect_one')
+@ppatch('side_effect_two')
+class TestPatchClass(TestCase):
+    def test_should_get_se(self, se):
+        self.assertIsInstance(se.side_effect_one, Mock)
+        self.assertIsInstance(se.side_effect_two, Mock)
+
+    def test_should_also_get_se(self, se):
+        self.assertIsInstance(se.side_effect_one, Mock)
+        self.assertIsInstance(se.side_effect_two, Mock)
+
+
 if __name__ == '__main__':
     unittest.main()
