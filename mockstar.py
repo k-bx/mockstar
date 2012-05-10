@@ -105,6 +105,15 @@ class M(MagicMock):
     """
     :class:`~MagicMock` with shortcuts. I just couldn't stand the
     ``.return_value.foo.return_value.bar.return_value`` thing.
+
+    Now you can do:
+
+    .. code-block:: python
+
+        from mockstar import M
+        m = M()
+        m.rv = 10
+        assert m() == 10
     """
     def __init__(self, *args, **kw):
         super(M, self).__init__(*args, **kw)
@@ -114,3 +123,24 @@ class M(MagicMock):
 
     #: shortcut for ``.return_value``
     rv = RVDescriptor()
+
+
+def sequence_side_effect(*args):
+    """
+    Generates function that returns i'th arg on i'th call.
+
+    Use like this:
+
+    .. code-block:: python
+
+        from mockstar import sequence_side_effect
+        from mockstar import M
+
+        m = M()
+        m.side_effect = sequence_side_effect(1, 2, 3)
+    """
+    seq = list(args)
+
+    def rv_fun(*args, **kw):
+        return seq.pop(0)
+    return rv_fun

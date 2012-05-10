@@ -9,6 +9,7 @@ from mockstar import p
 from mockstar import DotDict
 from mockstar import prefixed_p
 from mockstar import M
+from mockstar import sequence_side_effect
 
 
 def side_effect_one():
@@ -106,6 +107,14 @@ class TestPatchClass(TestCase):
     def test_should_also_get_se(self, se):
         self.assertIsInstance(se.side_effect_one, MagicMock)
         self.assertIsInstance(se.side_effect_two, MagicMock)
+
+
+class TestSequenceSideEffect(TestCase):
+    def test_should_get_sequence(self):
+        m = M(side_effect=sequence_side_effect(1, 2, 3))
+        self.assertEquals(m(), 1)
+        self.assertEquals(m(), 2)
+        self.assertEquals(m(), 3)
 
 
 if __name__ == '__main__':
