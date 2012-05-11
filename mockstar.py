@@ -82,9 +82,9 @@ def prefixed_p(prefix, patcher=p, **defaults):
     """
     @wraps(patcher)
     def rv(name, *args, **kw):
-        new_kw = kw.copy()
-        new_kw.update(defaults)
-        return patcher(prefix + '.' + name, *args, **new_kw)
+        def_copy = defaults.copy()
+        def_copy.update(kw)
+        return patcher(prefix + '.' + name, *args, **def_copy)
     return rv
 
 

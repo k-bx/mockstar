@@ -81,11 +81,16 @@ class TestM(TestCase):
 
 ppatch = prefixed_p(__name__)
 # ppatch_autospec_M = prefixed_p(__name__, autospec=True, to_m=True)
+ppatch_autospec = prefixed_p(__name__, autospec=False)
 
 
 class TestPrefixedP(TestCase):
     @ppatch('side_effect_five', autospec=True)
     def test_should_prefix_patch_here(self, se):
+        self.assertRaises(TypeError, lambda: se.side_effect_five())
+
+    @ppatch_autospec('side_effect_five', autospec=True)
+    def test_should_rewrite_ppatch_param(self, se):
         self.assertRaises(TypeError, lambda: se.side_effect_five())
 
     # @ppatch_autospec_M('side_effect_five')
