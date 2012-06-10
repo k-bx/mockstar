@@ -2,6 +2,8 @@
 
 import types
 from functools import wraps
+import unittest
+import inspect
 
 from mock import patch
 from mock import MagicMock
@@ -144,3 +146,38 @@ def sequence_side_effect(*args):
     def rv_fun(*args, **kw):
         return seq.pop(0)
     return rv_fun
+
+
+def side_effect_ify(method):
+    def new_f(self, *args, **kw):
+        self._current_test_method = method
+        return self.side_effects()
+        # new_kw = kw.copy()
+        # new_kw.update({'se': self.side_effects()})
+        # rv = method(self, *args, **new_kw)
+        # return rv
+    return new_f
+
+
+class BaseTestCase(unittest.TestCase):
+    # def setUp(self):
+    #     if hasattr(self, 'side_effects'):
+    #         self._side_effects = self.side_effects()
+
+    def invoke(self, se):
+        rv = self._current_test_method(self, se)
+        return rv
+
+    @classmethod
+    def setUpClass(cls):
+        methods = filter(lambda x: inspect.ismethod(x[1]),
+                         filter(lambda x: x[0].startswith('test_'),
+                                inspect.getmembers(cls)))
+        for method_name, method in methods:
+            setattr(cls, method_name, side_effect_ify(method))
+            # if not hasattr(method, 'side_effects_decorator_added'):
+            #     setattr(getattr(cls, method_name), 'side_effects_decorator_added', True)
+
+    # def run(self, result=None):
+    #     test_method = getattr(self, self._testMethodName)
+    #     super(BaseTestCase, self).run(result=result)

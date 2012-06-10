@@ -10,6 +10,7 @@ from mockstar import DotDict
 from mockstar import prefixed_p
 from mockstar import M
 from mockstar import sequence_side_effect
+from mockstar import BaseTestCase
 
 
 def side_effect_one():
@@ -120,6 +121,26 @@ class TestSequenceSideEffect(TestCase):
         self.assertEquals(m(), 1)
         self.assertEquals(m(), 2)
         self.assertEquals(m(), 3)
+
+
+def foo():
+    return 2 + 3
+
+
+class TestSideEffectsMethod(BaseTestCase):
+    @ppatch('foo')
+    def side_effects(self, se):
+        se.something = se.foo.return_value
+        return self.invoke(se)
+
+    def test_should_get_foo_mocked(self, se=None):
+        self.assertIsInstance(se.foo(), MagicMock)
+
+    def test_should_also_get_foo_mocksed(self, se=None):
+        self.assertIsInstance(se.foo(), MagicMock)
+
+    def test_should_see_something(self, se=None):
+        self.assertIs(se.something, se.foo())
 
 
 if __name__ == '__main__':
