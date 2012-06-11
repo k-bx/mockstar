@@ -68,6 +68,12 @@ With mockstar your test would look something like this:
 I hope you like mockstar's aspiration to fight copy-paste and useless
 typing.
 
+Installation
+============
+
+To install mockstar, just type::
+
+    pip install mockstar
 
 ..
    Contents:

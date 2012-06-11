@@ -10,3 +10,6 @@ If you are a honest man that tries to cover all his code with 100% of
 tests, then you know that you will have tons and tons of tests. That's
 why it is important to reduce lines of code and repeating yourself
 when you write those.
+
+Documentation: `http://mockstar.readthedocs.org
+<http://mockstar.readthedocs.org>`_.
