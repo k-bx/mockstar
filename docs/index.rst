@@ -16,6 +16,10 @@ give you a lot of mocking and unit-testing goods.
    Mockstar is still in development, but my team already uses it in
    our project heavily, so it should get stable API soon.
 
+Author: `Konstantine Rybnikov <http://redhotchilipython.com/>`_. Main
+repository on bitbucket: `https://bitbucket.org/k_bx/mockstar
+<https://bitbucket.org/k_bx/mockstar>`_.
+
 Unit-testing with MockStar
 ==========================
 
