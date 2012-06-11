@@ -2,3 +2,4 @@ syntax: glob
 .emacs-project
 *.pyc
 dist/
+docs/_build/

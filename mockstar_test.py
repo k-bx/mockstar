@@ -127,20 +127,40 @@ def foo():
     return 2 + 3
 
 
+count_score_rv = M()
+
+
+def count_score():
+    return count_score_rv
+
+
+def count_score_caller():
+    return count_score()
+
+
 class TestSideEffectsMethod(BaseTestCase):
+    @ppatch('count_score')
     @ppatch('foo')
     def side_effects(self, se):
         se.something = se.foo.return_value
+        se.four = 4
         return self.invoke(se)
 
-    def test_should_get_foo_mocked(self, se=None):
+    def test_should_get_foo_mocked(self, se):
         self.assertIsInstance(se.foo(), MagicMock)
 
-    def test_should_also_get_foo_mocksed(self, se=None):
+    def test_should_also_get_foo_mocksed(self, se):
         self.assertIsInstance(se.foo(), MagicMock)
 
-    def test_should_see_something(self, se=None):
+    def test_should_see_something(self, se):
         self.assertIs(se.something, se.foo())
+
+    def test_should_change_count_score(self, se):
+        se.count_score.return_value = m = M()
+
+        rv = count_score_caller()
+
+        self.assertIs(rv, m)
 
 
 if __name__ == '__main__':
