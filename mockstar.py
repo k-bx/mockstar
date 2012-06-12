@@ -164,6 +164,9 @@ class BaseTestCase(unittest.TestCase):
     #     if hasattr(self, 'side_effects'):
     #         self._side_effects = self.side_effects()
 
+    def side_effects(self, se):
+        return se
+
     def invoke(self, se):
         rv = self._current_test_method(self, se)
         return rv
