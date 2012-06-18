@@ -164,11 +164,14 @@ class BaseTestCase(unittest.TestCase):
     #     if hasattr(self, 'side_effects'):
     #         self._side_effects = self.side_effects()
 
-    def side_effects(self):
-        return
+    def side_effects(self, se=None):
+        return self.invoke(se=se)
 
-    def invoke(self, se):
-        rv = self._current_test_method(self, se)
+    def invoke(self, se=None):
+        if se is None:
+            rv = self._current_test_method(self)
+        else:
+            rv = self._current_test_method(self, se)
         return rv
 
     @classmethod
