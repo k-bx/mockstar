@@ -33,20 +33,22 @@ def get_names(name):
     return [name]
 
 
-def p(name, *args, **kw):
+def p(*args, **kw):
     """
     Acts like :func:``mock.patch``, but passes side-effects (patched mocks)
     into special dict-like ``se`` parameter.
     """
     def rv_decorator(fn):
-        patcher = patch(name, *args, **kw)
-        # add names to patcher
-        patcher.names = get_names(name)
         new_patchers = []
+        for name in args:
+            patcher = patch(name, **kw)
+            # add names to patcher
+            patcher.names = get_names(name)
+            new_patchers.append(patcher)
+
         if hasattr(fn, 'patchers'):
             new_patchers += fn.patchers
             del fn.patchers
-        new_patchers.append(patcher)
 
         @wraps(fn)
         def rv_fun(*args, **kw):
@@ -83,10 +85,11 @@ def prefixed_p(prefix, patcher=p, **defaults):
     - `**defaults`: default kw-args
     """
     @wraps(patcher)
-    def rv(name, *args, **kw):
+    def rv(*args, **kw):
         def_copy = defaults.copy()
         def_copy.update(kw)
-        return patcher(prefix + '.' + name, *args, **def_copy)
+        full_names = map(lambda name: prefix + '.' + name, args)
+        return patcher(*full_names, **def_copy)
     return rv
 
 
