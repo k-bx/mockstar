@@ -46,7 +46,8 @@ class TestDotDict(TestCase):
 
 
 class TestPatch(TestCase):
-    @p(__name__ + '.side_effect_one', __name__ + '.side_effect_two')
+    @p(__name__ + '.side_effect_one')
+    @p(__name__ + '.side_effect_two')
     def test_should_mock_to_kw(self, se):
         self.assertIsInstance(se.side_effect_one, MagicMock)
         self.assertIsInstance(se.side_effect_two, MagicMock)
@@ -65,6 +66,13 @@ class TestPatch(TestCase):
     def test_should_pass_mock_parameters(self, mockstar_patch_mock, se):
         se.side_effect_five(10)
         self.assertRaises(TypeError, lambda: se.side_effect_five())
+
+
+class TestMultiPatch(TestCase):
+    @p(__name__ + '.side_effect_one', __name__ + '.side_effect_two')
+    def test_should_mock_to_kw(self, se):
+        self.assertIsInstance(se.side_effect_one, MagicMock)
+        self.assertIsInstance(se.side_effect_two, MagicMock)
 
 
 class TestM(TestCase):
@@ -102,8 +110,20 @@ class TestPrefixedP(TestCase):
     #     # self.assertIsInstance(m, M)
 
 
-@ppatch('side_effect_one', 'side_effect_two')
+@ppatch('side_effect_one')
+@ppatch('side_effect_two')
 class TestPatchClass(TestCase):
+    def test_should_get_se(self, se):
+        self.assertIsInstance(se.side_effect_one, MagicMock)
+        self.assertIsInstance(se.side_effect_two, MagicMock)
+
+    def test_should_also_get_se(self, se):
+        self.assertIsInstance(se.side_effect_one, MagicMock)
+        self.assertIsInstance(se.side_effect_two, MagicMock)
+
+
+@ppatch('side_effect_one', 'side_effect_two')
+class TestMultiPatchClass(TestCase):
     def test_should_get_se(self, se):
         self.assertIsInstance(se.side_effect_one, MagicMock)
         self.assertIsInstance(se.side_effect_two, MagicMock)
