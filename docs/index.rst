@@ -3,25 +3,43 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-======================================
- Mockstar -- Mocking Like a Rockstar!
-======================================
+Mockstar -- Declarative Mocking Like a Rockstar!
+================================================
 
-Mockstar is a bunch of small enhances on top of `Mock
-<http://www.voidspace.org.uk/python/mock/mock.html>`_ library that can
-give you a lot of mocking and unit-testing goods.
-
-.. note::
-
-   Mockstar is still in development, but my team already uses it in
-   our project heavily, so it should get stable API soon.
+Mockstar is a small enhance on top of `Mock
+<http://www.voidspace.org.uk/python/mock/mock.html>`_ library that
+gives you declarative way to write your unit-tests.
 
 Author: `Konstantine Rybnikov <http://redhotchilipython.com/>`_. Main
 repository on bitbucket: `https://bitbucket.org/k_bx/mockstar
 <https://bitbucket.org/k_bx/mockstar>`_.
 
-Unit-testing with MockStar
-==========================
+Philosophy
+----------
+
+Usually, **unit under test** is something simple, like function or
+method. It's result is dependent on it's arguments and calls to some
+external dependencies (side-effects). For example, here:
+
+.. literalinclude:: code/philosophy.py
+
+Unit under test is ``PostForm`` class (more precicely, it's ``clean``
+method here), it has one side-effect, which is ``is_post_exist``
+function.
+
+Usually, you create a single test module for single code module (well,
+I do). So in this example **module under test** would be
+``myapp.blog.forms``.
+
+Minimal test-case example
+-------------------------
+
+Your minimal test case would look something like this:
+
+.. literalinclude:: code/minimal_example.py
+
+More detailed introduction
+--------------------------
 
 So, you want to implement and test your unit. Let's say it's a
 function :func:`create_user` that will look like this when it is done:
@@ -69,11 +87,11 @@ With mockstar your test would look something like this:
 
 .. literalinclude:: code/unit_test_mockstar.py
 
-I hope you like mockstar's aspiration to fight copy-paste and useless
-typing.
+I hope you like mockstar's aspiration to get declarative way of
+writing unit-tests and reduce of copypasta.
 
 Installation
-============
+------------
 
 To install mockstar, just type::
 
@@ -86,7 +104,7 @@ To install mockstar, just type::
       :maxdepth: 2
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

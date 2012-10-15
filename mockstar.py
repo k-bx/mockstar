@@ -35,8 +35,8 @@ def get_names(name):
 
 def p(*args, **kw):
     """
-    Acts like :func:``mock.patch``, but passes side-effects (patched mocks)
-    into special dict-like ``se`` parameter.
+    Acts like :func:``mock.patch``, but passes side-effects (patched
+    mocks) into special dict-like ``se`` parameter.
     """
     def rv_decorator(fn):
         new_patchers = []
