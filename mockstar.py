@@ -154,7 +154,7 @@ def sequence_side_effect(*args):
 def side_effect_ify(method):
     def new_f(self, *args, **kw):
         self._current_test_method = method
-        return self.side_effects()
+        return self.side_effects(se=DotDict())
         # new_kw = kw.copy()
         # new_kw.update({'se': self.side_effects()})
         # rv = method(self, *args, **new_kw)
@@ -167,14 +167,14 @@ class BaseTestCase(unittest.TestCase):
     #     if hasattr(self, 'side_effects'):
     #         self._side_effects = self.side_effects()
 
-    def side_effects(self, se=None):
+    def side_effects(self, se):
         return self.invoke(se=se)
 
-    def invoke(self, se=None):
-        if se is None:
-            rv = self._current_test_method(self)
+    def invoke(self, se):
+        if 'se' in self._current_test_method.func_code.co_varnames:
+            rv = self._current_test_method(self, se=se)
         else:
-            rv = self._current_test_method(self, se)
+            rv = self._current_test_method(self)
         return rv
 
     @classmethod
