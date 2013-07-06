@@ -10,9 +10,11 @@ Mockstar is a small enhance on top of `Mock
 <http://www.voidspace.org.uk/python/mock/mock.html>`_ library that
 gives you declarative way to write your unit-tests.
 
-Author: `Konstantine Rybnikov <http://redhotchilipython.com/>`_. Main
-repository on bitbucket: `https://bitbucket.org/k_bx/mockstar
-<https://bitbucket.org/k_bx/mockstar>`_.
+- author: `Konstantine Rybnikov <http://redhotchilipython.com/>`_.
+- main repository on bitbucket: `https://bitbucket.org/k_bx/mockstar
+<https://bitbucket.org/k_bx/mockstar>`_
+- mirror on github: `https://github.com/k-bx/mockstar
+<https://github.com/k-bx/mockstar>`_
 
 Philosophy
 ----------
