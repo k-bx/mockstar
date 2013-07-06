@@ -12,9 +12,9 @@ gives you declarative way to write your unit-tests.
 
 - author: `Konstantine Rybnikov <http://redhotchilipython.com/>`_.
 - main repository on bitbucket: `https://bitbucket.org/k_bx/mockstar
-<https://bitbucket.org/k_bx/mockstar>`_
+  <https://bitbucket.org/k_bx/mockstar>`_
 - mirror on github: `https://github.com/k-bx/mockstar
-<https://github.com/k-bx/mockstar>`_
+  <https://github.com/k-bx/mockstar>`_
 
 Philosophy
 ----------
