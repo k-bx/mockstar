@@ -6,7 +6,7 @@
 Mockstar -- Declarative Mocking Like a Rockstar!
 ================================================
 
-Mockstar is a small enhance on top of `Mock
+Mockstar is a small enhancement on top of `Mock
 <http://www.voidspace.org.uk/python/mock/mock.html>`_ library that
 gives you declarative way to write your unit-tests.
 
@@ -20,12 +20,12 @@ Philosophy
 ----------
 
 Usually, **unit under test** is something simple, like function or
-method. It's result is dependent on it's arguments and calls to some
+method. Its result is dependent on its arguments and calls to some
 external dependencies (side-effects). For example, here:
 
 .. literalinclude:: code/philosophy.py
 
-Unit under test is ``PostForm`` class (more precicely, it's ``clean``
+Unit under test is ``PostForm`` class (more precisely, it's ``clean``
 method here), it has one side-effect, which is ``is_post_exist``
 function.
 
