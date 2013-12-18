@@ -7,7 +7,7 @@ with open('README.rst') as f:
     LONG_DESCRIPTION = f.read()
 
 setup(name='mockstar',
-      version='1.0.0',
+      version='1.1.0',
       description=DESCRIPTION,
       long_description=LONG_DESCRIPTION,
       author='Konstantine Rybnikov',
